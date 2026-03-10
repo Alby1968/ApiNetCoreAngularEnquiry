@@ -19,7 +19,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll",
         builder =>
         {
-            builder.WithOrigins("http://localhost:4200", "https://localhost:4200")
+            
+            //builder.WithOrigins("http://localhost:4200", "https://localhost:4200")
+            builder.WithOrigins("https://enquiryapiangular.netlify.app")
                    .AllowAnyOrigin()
                    .AllowAnyMethod()
                    .AllowAnyHeader();
