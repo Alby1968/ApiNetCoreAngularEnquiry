@@ -17,8 +17,7 @@ WORKDIR /app
 # Copia l’output dal build stage
 COPY --from=build /app/out ./
 
-# Espone la porta 8080
 EXPOSE 8080
 
-# Avvia l’app
+# Avvia l'app
 ENTRYPOINT ["dotnet", "ApiNetCoreAngularEnquiry.dll"]

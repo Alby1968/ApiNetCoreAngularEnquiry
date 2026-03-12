@@ -16,8 +16,8 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
     {
         policy.WithOrigins(
-                "https://apinetcoreenquiry.netlify.app", // frontend Netlify
-                "http://localhost:4200")                 // sviluppo locale
+                "https://apinetcoreenquiry.netlify.app",
+                "http://localhost:4200")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
