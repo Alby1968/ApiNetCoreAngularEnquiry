@@ -1,5 +1,7 @@
-﻿using ApiNetCoreAngular.Model;
-using Microsoft.EntityFrameworkCore;
+﻿using ApiNetCoreAngular.Model;                  // Il tuo DbContext e modelli
+using Microsoft.EntityFrameworkCore;           // EF Core
+using Microsoft.OpenApi.Models;                // Swagger
+using Swashbuckle.AspNetCore.SwaggerGen;       // Swagger extensions
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +27,15 @@ builder.Services.AddCors(options =>
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Enquiry API",
+        Version = "v1",
+        Description = "API per gestione Enquiry"
+    });
+});
 
 var app = builder.Build();
 
@@ -37,7 +47,7 @@ app.UseCors();
 
 app.UseAuthorization();
 
-// Swagger
+// Swagger middleware
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
