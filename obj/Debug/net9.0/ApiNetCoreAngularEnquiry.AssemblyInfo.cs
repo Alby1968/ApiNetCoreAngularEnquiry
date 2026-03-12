@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ApiNetCoreAngularEnquiry")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+178c025e5909faeea623595ee09160fa871fa6e6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f7d7d8255574994c113b3b494aaf26d498b5e1ec")]
 [assembly: System.Reflection.AssemblyProductAttribute("ApiNetCoreAngularEnquiry")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ApiNetCoreAngularEnquiry")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
