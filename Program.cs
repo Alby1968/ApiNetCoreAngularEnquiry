@@ -12,13 +12,13 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<EnquiryDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// CORS: consentire solo il tuo frontend Netlify
+// ===== CORS =====
+// Consentire solo il frontend Netlify
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowNetlify", policy =>
     {
-        
-        policy.WithOrigins("https://apinetcoreenquiry.netlify.app")
+        policy.WithOrigins("https://apinetcoreenquiry.netlify.app") // <--- dominio Netlify corretto
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -37,21 +37,36 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
-// ===== Configure middleware =====
+// ===== Middleware =====
 
-// Abilita Swagger in produzione e sviluppo
+// Debug: log degli header per controllare CORS
+app.Use(async (context, next) =>
+{
+    await next();
+    if (context.Request.Path.StartsWithSegments("/api"))
+    {
+        Console.WriteLine($"CORS headers for {context.Request.Path}:");
+        foreach (var header in context.Response.Headers)
+        {
+            Console.WriteLine($"{header.Key}: {header.Value}");
+        }
+    }
+});
+
+// **Usa CORS prima di HTTPS e Authorization**
+app.UseCors("AllowNetlify");
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+// Swagger accessibile in produzione e sviluppo
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
     options.SwaggerEndpoint("/swagger/Enquiry/swagger.json", "Enquiry API");
-    options.RoutePrefix = "swagger"; // accesso via /swagger
+    options.RoutePrefix = "swagger"; // /swagger
 });
-
-app.UseHttpsRedirection();
-
-app.UseCors("AllowNetlify");
-
-app.UseAuthorization();
 
 app.MapControllers();
 
