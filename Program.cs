@@ -1,18 +1,22 @@
-using ApiNetCoreAngular.Model;
+﻿using ApiNetCoreAngular.Model;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+// Database
 builder.Services.AddDbContext<EnquiryDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// CORS per Netlify + localhost
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddDefaultPolicy(policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins(
+                "https://apinetcoreenquiry.netlify.app",
+                "http://localhost:4200")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -25,15 +29,25 @@ var app = builder.Build();
 
 app.UseRouting();
 
-app.UseCors("AllowAll");
+// ✅ Usa il middleware CORS globale
+app.UseCors();
 
 app.UseAuthorization();
 
+// Swagger
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Enquiry API V1");
+    c.RoutePrefix = "swagger";
+});
+
+// Controller
 app.MapControllers();
 
+// Root test
 app.MapGet("/", () => "API RUNNING");
 
-// Render usa automaticamente la porta
-
+// Porta dinamica per Render
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 app.Run($"http://0.0.0.0:{port}");
