@@ -4,61 +4,47 @@ using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<EnquiryDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
-
-builder.Services.AddCors();
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        builder =>
-        {
-            //builder.WithOrigins("http://localhost:4200", "https://localhost:4200")
-            builder.WithOrigins("https://enquiryapiangular.netlify.app")
-                   .AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
-        });
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.WithOrigins("https://enquiryapiangular.netlify.app")
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
 });
 
-builder.Services.AddEndpointsApiExplorer();                         // SWAGGER
-builder.Services.AddSwaggerGen(options =>                           // SWAGGER
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("Enquiry", new OpenApiInfo
     {
         Title = "Enquiry Api",
-        
         Version = "V1"
     });
 });
 
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())                                          // SWAGGER
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/Enquiry/swagger.json", "Enquiry API");
-        options.RoutePrefix = "swagger"; // default
-
-    });
-}
-
+    options.SwaggerEndpoint("/swagger/Enquiry/swagger.json", "Enquiry API");
+    options.RoutePrefix = "swagger";
+});
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 app.UseAuthorization();
 
 app.MapControllers();
-app.UseCors();
 
-app.Run();
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+app.Run($"http://0.0.0.0:{port}");
