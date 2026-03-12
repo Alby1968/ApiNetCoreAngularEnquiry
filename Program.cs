@@ -1,67 +1,64 @@
 using ApiNetCoreAngular.Model;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ===== Add services =====
 builder.Services.AddControllers();
 
-// Database
+// Database: leggere connection string da Environment su Render
 builder.Services.AddDbContext<EnquiryDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// CORS: consentire frontend Netlify e localhost dev
+// ===== CORS =====
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAllOrigins", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
         policy.WithOrigins(
-                "https://apinetcoreenquiry.netlify.app",
-                "http://localhost:4200"   // per sviluppo locale
-            )
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
+            "https://apinetcoreenquiry.netlify.app", // frontend Netlify
+            "http://localhost:4200"                   // sviluppo locale
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
     });
 });
 
-// Swagger
+// ===== Swagger (opzionale) =====
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("Enquiry", new OpenApiInfo
-    {
-        Title = "Enquiry API",
-        Version = "V1"
-    });
-});
+builder.Services.AddSwaggerGen();
 
+// ===== Build app =====
 var app = builder.Build();
 
 // ===== Middleware =====
 
-// **Global CORS middleware**
+// Applica CORS globale prima di HTTPS e Authorization
+app.UseCors("AllowAll");
+
+// Gestione preflight OPTIONS
 app.Use(async (context, next) =>
 {
-    context.Response.Headers.Add("Access-Control-Allow-Origin", "https://apinetcoreenquiry.netlify.app");
-    context.Response.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-    context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-
     if (context.Request.Method == "OPTIONS")
     {
         context.Response.StatusCode = 200;
         await context.Response.CompleteAsync();
         return;
     }
-
     await next();
 });
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
+
+// Swagger (opzionale)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Enquiry API V1");
+    c.RoutePrefix = "swagger";
+});
 
 app.MapControllers();
 
