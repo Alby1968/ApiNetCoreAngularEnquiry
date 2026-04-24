@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "5Tg24lzjt44=",
+  "dgSpecHash": "iuPSW66YQWc=",
   "success": true,
   "projectFilePath": "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiryRender\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry.csproj",
   "expectedPackageFiles": [
@@ -88,7 +88,7 @@
       "filePath": "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiryRender\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry.csproj",
       "libraryId": "Swashbuckle.AspNetCore",
       "targetGraphs": [
-        "net7.0"
+        "net8.0"
       ]
     }
   ]
