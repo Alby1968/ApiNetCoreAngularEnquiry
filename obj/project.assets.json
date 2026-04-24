@@ -3904,11 +3904,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry.csproj",
+      "projectUniqueName": "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiryRender\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry.csproj",
       "projectName": "ApiNetCoreAngularEnquiry",
-      "projectPath": "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry.csproj",
+      "projectPath": "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiryRender\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry.csproj",
       "packagesPath": "C:\\Users\\acolu\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry\\obj\\",
+      "outputPath": "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiryRender\\ApiNetCoreAngularEnquiry\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -3936,7 +3936,13 @@
         "warnAsError": [
           "NU1605"
         ]
-      }
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net7.0": {
@@ -3982,7 +3988,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.410\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.312\\RuntimeIdentifierGraph.json"
       }
     }
   },
@@ -3991,7 +3997,7 @@
       "code": "NU1603",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "ApiNetCoreAngularEnquiry dipende da Swashbuckle.AspNetCore (>= 6.6.0) ma non è stato possibile trovare Swashbuckle.AspNetCore 6.6.0. È stata risolta una migliore corrispondenza approssimativa di Swashbuckle.AspNetCore 6.6.1.",
+      "message": "ApiNetCoreAngularEnquiry dipende da Swashbuckle.AspNetCore (>= 6.6.0), ma Swashbuckle.AspNetCore 6.6.0 non è stato trovato. Swashbuckle.AspNetCore 6.6.1 è stato risolto.",
       "libraryId": "Swashbuckle.AspNetCore",
       "targetGraphs": [
         "net7.0"

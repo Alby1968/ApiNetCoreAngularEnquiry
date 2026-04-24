@@ -13,16 +13,26 @@ builder.Services.AddDbContext<EnquiryDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // CORS globale per frontend Netlify + localhost
+//builder.Services.AddCors(options =>
+//{
+//    options.AddDefaultPolicy(policy =>
+//    {
+//        policy.WithOrigins(
+//                "https://apinetcoreenquiry.netlify.app",
+//                "http://localhost:4200")
+//              .AllowAnyHeader()
+//              .AllowAnyMethod();
+//    });
+//});
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
-    {
-        policy.WithOrigins(
-                "https://apinetcoreenquiry.netlify.app",
-                "http://localhost:4200")
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
+    options.AddPolicy("AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
 });
 
 // Swagger
@@ -43,7 +53,7 @@ var app = builder.Build();
 app.UseRouting();
 
 // Applica CORS globale
-app.UseCors();
+//app.UseCors();
 
 app.UseAuthorization();
 
@@ -55,12 +65,21 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "swagger"; // accessibile da /swagger
 });
 
-// Controller endpoints
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+app.UseCors("AllowAll");
+
 app.MapControllers();
 
-// Root test per verificare se l'app gira
-app.MapGet("/", () => "API RUNNING");
+// Controller endpoints
 
-// Porta dinamica per Render
+
+//app.MapFallbackToFile("index.html");
+//// Root test per verificare se l'app gira
+//// app.MapGet("/", () => "API RUNNING");
+
+//// Porta dinamica per Render
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-app.Run($"http://0.0.0.0:{port}");
+app.Urls.Add($"http://*:{port}");
+app.Run();

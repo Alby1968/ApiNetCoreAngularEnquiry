@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry.csproj": {}
+    "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiryRender\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry.csproj": {}
   },
   "projects": {
-    "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry.csproj": {
+    "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiryRender\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry.csproj",
+        "projectUniqueName": "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiryRender\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry.csproj",
         "projectName": "ApiNetCoreAngularEnquiry",
-        "projectPath": "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry.csproj",
+        "projectPath": "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiryRender\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry.csproj",
         "packagesPath": "C:\\Users\\acolu\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry\\obj\\",
+        "outputPath": "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiryRender\\ApiNetCoreAngularEnquiry\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -39,7 +39,13 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net7.0": {
@@ -85,7 +91,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.410\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.312\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -1,11 +1,1 @@
-{
-  "Version": 1,
-  "Hash": "w3mPMly6KG612kLnTfKqwQPcLYbL8rqfnmkD4n0c+ho=",
-  "Source": "ApiNetCoreAngularEnquiry",
-  "BasePath": "_content/ApiNetCoreAngularEnquiry",
-  "Mode": "Default",
-  "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
-}
+{"Version":1,"Hash":"4a8CnvSjOUpzrew420kqcJgpiS2Nou7+0v5JM151cFo=","Source":"ApiNetCoreAngularEnquiry","BasePath":"/","Mode":"Root","ManifestType":"Build","ReferencedProjectsConfiguration":[],"DiscoveryPatterns":[],"Assets":[],"Endpoints":[]}

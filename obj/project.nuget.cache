@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "58Gy/47j8jpN+spYhclUhD7YTVmWvyWl9Yq1R76Ed25L0OTd3rJb4olxxMzNXQwOK23D9wSs8qdOzepyYLs/zA==",
+  "dgSpecHash": "5Tg24lzjt44=",
   "success": true,
-  "projectFilePath": "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry.csproj",
+  "projectFilePath": "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiryRender\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\acolu\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\acolu\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
@@ -82,8 +82,10 @@
     {
       "code": "NU1603",
       "level": "Warning",
+      "message": "ApiNetCoreAngularEnquiry dipende da Swashbuckle.AspNetCore (>= 6.6.0), ma Swashbuckle.AspNetCore 6.6.0 non è stato trovato. Swashbuckle.AspNetCore 6.6.1 è stato risolto.",
+      "projectPath": "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiryRender\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry.csproj",
       "warningLevel": 1,
-      "message": "ApiNetCoreAngularEnquiry dipende da Swashbuckle.AspNetCore (>= 6.6.0) ma non è stato possibile trovare Swashbuckle.AspNetCore 6.6.0. È stata risolta una migliore corrispondenza approssimativa di Swashbuckle.AspNetCore 6.6.1.",
+      "filePath": "C:\\Users\\acolu\\source\\repos\\ApiNetCoreAngularEnquiryRender\\ApiNetCoreAngularEnquiry\\ApiNetCoreAngularEnquiry.csproj",
       "libraryId": "Swashbuckle.AspNetCore",
       "targetGraphs": [
         "net7.0"
