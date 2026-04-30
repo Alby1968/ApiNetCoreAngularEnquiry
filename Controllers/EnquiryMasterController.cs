@@ -1,4 +1,3 @@
-using ApiNetCoreAngular.Model;
 using ApiNetCoreAngularEnquiry.Model;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
