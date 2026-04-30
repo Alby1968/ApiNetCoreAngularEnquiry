@@ -1,18 +1,14 @@
-﻿using ApiNetCoreAngular.Model;                  // DbContext e modelli
-using Microsoft.EntityFrameworkCore;           // EF Core
-using Microsoft.OpenApi.Models;                // Swagger
+﻿using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ===== Servizi =====
+// ===== SERVIZI =====
 builder.Services.AddControllers();
 
-// Database
-// builder.Services.AddDbContext<EnquiryDbContext>(options =>
-//   options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-   builder.Services.AddDbContext<EnquiryDbContext>(options =>
-     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-// CORS
+// HttpClient (necessario per Supabase REST)
+builder.Services.AddHttpClient();
+
+// ===== CORS =====
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
@@ -24,7 +20,7 @@ builder.Services.AddCors(options =>
         });
 });
 
-// Swagger
+// ===== SWAGGER =====
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -35,18 +31,12 @@ builder.Services.AddSwaggerGen(c =>
         Description = "API per gestione Enquiry"
     });
 });
-// ===== PORT FIX PER RENDER =====
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-// builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 var app = builder.Build();
 
-// ===== Middleware =====
-//app.UseRouting();
-
+// ===== MIDDLEWARE =====
 app.UseCors("AllowAll");
 
-// Swagger
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -55,16 +45,16 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseAuthorization();
+
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
 app.MapControllers();
 
-//<<<<<<< HEAD
 app.MapGet("/", () => "ApiNetCoreAngularEnquiry is running 🚀");
 
-// ===== PORT FIX PER RENDER =====
-//  var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-//  builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+// ===== RENDER PORT FIX =====
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+app.Urls.Add($"http://0.0.0.0:{port}");
 
 app.Run();
