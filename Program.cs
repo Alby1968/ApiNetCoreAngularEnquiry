@@ -35,6 +35,7 @@ builder.Services.AddSwaggerGen(c =>
 var app = builder.Build();
 
 // ===== MIDDLEWARE =====
+app.UseRouting();
 app.UseCors("AllowAll");
 
 app.UseSwagger();
