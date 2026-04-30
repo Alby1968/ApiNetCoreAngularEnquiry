@@ -8,12 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // Database
-//builder.Services.AddDbContext<EnquiryDbContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-
 builder.Services.AddDbContext<EnquiryDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // CORS
 builder.Services.AddCors(options =>
@@ -38,19 +34,16 @@ builder.Services.AddSwaggerGen(c =>
         Description = "API per gestione Enquiry"
     });
 });
-
 // ===== PORT FIX PER RENDER =====
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-//builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+// builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 var app = builder.Build();
 
 // ===== Middleware =====
-app.UseRouting();
+//app.UseRouting();
 
 app.UseCors("AllowAll");
-
-app.UseAuthorization();
 
 // Swagger
 app.UseSwagger();
@@ -60,16 +53,17 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "swagger";
 });
 
+app.UseAuthorization();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
 app.MapControllers();
 
+//<<<<<<< HEAD
 app.MapGet("/", () => "ApiNetCoreAngularEnquiry is running 🚀");
 
-
 // ===== PORT FIX PER RENDER =====
-//var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-//builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+//  var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+//  builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 app.Run();
