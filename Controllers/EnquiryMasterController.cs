@@ -62,17 +62,29 @@ public class EnquiryMasterController : ControllerBase
     }
     //[HttpGet("GetAllEnquiry")]
     //public List<EnquiryModel> GetAllEnquiry() => _context.EnquiryModel.ToList();
+[HttpGet("GetAllEnquiry")]
+public async Task<IActionResult> GetAllEnquiry()
+{
+    var response = await _httpClient.GetAsync($"{_supabaseUrl}EnquiryModel?select=*");
 
-    [HttpGet("GetAllEnquiry")]
-    public async Task<List<EnquiryModel>> GetAllEnquiry()
+    var json = await response.Content.ReadAsStringAsync();
+
+    if (!response.IsSuccessStatusCode)
     {
-        var response = await _httpClient.GetAsync($"{_supabaseUrl}EnquiryModel?select=*");
-        var json = await response.Content.ReadAsStringAsync();
-
-        return JsonConvert.DeserializeObject<List<EnquiryModel>>(json);
+        return StatusCode((int)response.StatusCode, json);
     }
 
-    //[HttpPost("CreateNewEnquiry")]
+    try
+    {
+        var data = JsonConvert.DeserializeObject<List<EnquiryModel>>(json);
+        return Ok(data);
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, ex.Message + " | JSON: " + json);
+    }
+}
+     //[HttpPost("CreateNewEnquiry")]
     //public EnquiryModel AddNewEnquiry(EnquiryModel newEnquiry)
     //{
     //    newEnquiry.createdDate = DateTime.Now;
