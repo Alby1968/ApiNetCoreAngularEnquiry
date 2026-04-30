@@ -14,7 +14,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll",
         policy =>
         {
-            policy.AllowAnyOrigin()
+            policy.WithOrigins("https://effervescent-haupia-0f73ab.netlify.app")
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
