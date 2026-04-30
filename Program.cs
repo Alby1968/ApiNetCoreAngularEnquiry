@@ -8,9 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // Database
-builder.Services.AddDbContext<EnquiryDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+// builder.Services.AddDbContext<EnquiryDbContext>(options =>
+//   options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+   builder.Services.AddDbContext<EnquiryDbContext>(options =>
+     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 // CORS
 builder.Services.AddCors(options =>
 {
