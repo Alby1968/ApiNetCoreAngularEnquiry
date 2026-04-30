@@ -1,3 +1,4 @@
+
 using ApiNetCoreAngularEnquiry.Model;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -21,9 +22,12 @@ public class EnquiryMasterController : ControllerBase
     private readonly string _supabaseUrl = "https://zanjsybekkkadfqfbilc.supabase.co/rest/v1/";
     private readonly string _apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphbmpzeWJla2trYWRmcWZiaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNzc1OTIsImV4cCI6MjA5Mjk1MzU5Mn0.jP2PlBhacXCirKmyu8nSLAuKjIRCRH7LKYoKK0BU4SA";
 
-    public EnquiryMasterController(HttpClient httpClient)
+    public EnquiryMasterController(HttpClient httpClient,IConfiguration config)
     {
         _httpClient = httpClient;
+        _apiKey = config["Supabase:Key"];
+
+
 
         _httpClient.DefaultRequestHeaders.Add("apikey", _apiKey);
         _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_apiKey}");
@@ -77,32 +81,32 @@ public class EnquiryMasterController : ControllerBase
     //    return newEnquiry;
     //}
     [HttpPost("CreateNewEnquiry")]
-public async Task<EnquiryModel?> AddNewEnquiry(EnquiryModel newEnquiry)
-{
-    newEnquiry.createdDate = DateTime.UtcNow;
+    public async Task<EnquiryModel?> AddNewEnquiry(EnquiryModel newEnquiry)
+    {
+        newEnquiry.createdDate = DateTime.UtcNow;
 
-    var content = new StringContent(
-        JsonConvert.SerializeObject(newEnquiry),
-        Encoding.UTF8,
-        "application/json"
-    );
+        var content = new StringContent(
+            JsonConvert.SerializeObject(newEnquiry),
+            Encoding.UTF8,
+            "application/json"
+        );
 
-    // 🔥 HEADER FONDAMENTALE PER SUPABASE
-    var request = new HttpRequestMessage(HttpMethod.Post, $"{_supabaseUrl}EnquiryModel");
-    request.Content = content;
-    request.Headers.Add("Prefer", "return=representation");
+        // 🔥 HEADER FONDAMENTALE PER SUPABASE
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{_supabaseUrl}EnquiryModel");
+        request.Content = content;
+        request.Headers.Add("Prefer", "return=representation");
 
-    var response = await _httpClient.SendAsync(request);
+        var response = await _httpClient.SendAsync(request);
 
-    if (!response.IsSuccessStatusCode)
-        return null;
+        if (!response.IsSuccessStatusCode)
+            return null;
 
-    var json = await response.Content.ReadAsStringAsync();
+        var json = await response.Content.ReadAsStringAsync();
 
-    var result = JsonConvert.DeserializeObject<List<EnquiryModel>>(json);
+        var result = JsonConvert.DeserializeObject<List<EnquiryModel>>(json);
 
-    return result?.FirstOrDefault();
-}
+        return result?.FirstOrDefault();
+    }
     [HttpPut("UpdateEnquiry")]
     public async Task<bool> Update(EnquiryModel updateEnquiry)
     {
