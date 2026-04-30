@@ -13,7 +13,7 @@
     <!-- JSON -->
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 
-    <!-- <ProjectReference Include="..\ApiNetCoreAngular\ApiNetCoreAngular.csproj" /> -->
+  
 
   </ItemGroup>
 
