@@ -63,14 +63,14 @@ public class EnquiryMasterController : ControllerBase
     //[HttpGet("GetAllEnquiry")]
     //public List<EnquiryModel> GetAllEnquiry() => _context.EnquiryModel.ToList();
 
-    //[HttpGet("GetAllEnquiry")]
-    //public async Task<List<EnquiryModel>> GetAllEnquiry()
-    //{
-    //    var response = await _httpClient.GetAsync($"{_supabaseUrl}EnquiryModel?select=*");
-    //    var json = await response.Content.ReadAsStringAsync();
+    [HttpGet("GetAllEnquiry")]
+    public async Task<List<EnquiryModel>> GetAllEnquiry()
+    {
+        var response = await _httpClient.GetAsync($"{_supabaseUrl}EnquiryModel?select=*");
+        var json = await response.Content.ReadAsStringAsync();
 
-    //    return JsonConvert.DeserializeObject<List<EnquiryModel>>(json);
-    //}
+        return JsonConvert.DeserializeObject<List<EnquiryModel>>(json);
+    }
 
     //[HttpPost("CreateNewEnquiry")]
     //public EnquiryModel AddNewEnquiry(EnquiryModel newEnquiry)
