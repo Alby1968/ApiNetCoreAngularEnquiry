@@ -20,7 +20,7 @@ public class EnquiryMasterController : ControllerBase
     // Per chiamate a Supabase
     private readonly HttpClient _httpClient;
     private readonly string _supabaseUrl = "https://zanjsybekkkadfqfbilc.supabase.co/rest/v1/";
-    private readonly string _apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphbmpzeWJla2trYWRmcWZiaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNzc1OTIsImV4cCI6MjA5Mjk1MzU5Mn0.jP2PlBhacXCirKmyu8nSLAuKjIRCRH7LKYoKK0BU4SA\r\n";
+    private readonly string _apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphbmpzeWJla2trYWRmcWZiaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNzc1OTIsImV4cCI6MjA5Mjk1MzU5Mn0.jP2PlBhacXCirKmyu8nSLAuKjIRCRH7LKYoKK0BU4SA";
 
     public EnquiryMasterController(HttpClient httpClient)
     {
