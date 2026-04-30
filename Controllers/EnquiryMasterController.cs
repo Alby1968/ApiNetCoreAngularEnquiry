@@ -1,7 +1,9 @@
-﻿using ApiNetCoreAngular.Model;
+using ApiNetCoreAngular.Model;
 using ApiNetCoreAngularEnquiry.Model;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Text;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -9,58 +11,121 @@ using Microsoft.AspNetCore.Mvc;
 [ApiExplorerSettings(GroupName = "Enquiry")]
 public class EnquiryMasterController : ControllerBase
 {
-    private readonly EnquiryDbContext _context;
-    public EnquiryMasterController(EnquiryDbContext context)
+    //private readonly EnquiryDbContext _context;
+    //public EnquiryMasterController(EnquiryDbContext context)
+    //{
+    //    _context = context;
+    //}
+
+    // Per chiamate a Supabase
+    private readonly HttpClient _httpClient;
+    private readonly string _supabaseUrl = "https://zanjsybekkkadfqfbilc.supabase.co/rest/v1/";
+    private readonly string _apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphbmpzeWJla2trYWRmcWZiaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNzc1OTIsImV4cCI6MjA5Mjk1MzU5Mn0.jP2PlBhacXCirKmyu8nSLAuKjIRCRH7LKYoKK0BU4SA\r\n";
+
+    public EnquiryMasterController(HttpClient httpClient)
     {
-        _context = context;
+        _httpClient = httpClient;
+
+        _httpClient.DefaultRequestHeaders.Add("apikey", _apiKey);
+        _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_apiKey}");
     }
 
+    //[HttpGet("GetAllStatus")]
+    //public List<EnquiryStatus> GetAllStatus() => _context.EnquiryStatus.ToList();
     [HttpGet("GetAllStatus")]
-    public List<EnquiryStatus> GetAllStatus() => _context.EnquiryStatus.ToList();
+    public async Task<List<EnquiryStatus>> GetAllStatus()
+    {
+        var response = await _httpClient.GetAsync($"{_supabaseUrl}EnquiryStatus?select=*");
+
+        if (!response.IsSuccessStatusCode)
+            return new List<EnquiryStatus>();
+
+        var json = await response.Content.ReadAsStringAsync();
+
+        return JsonConvert.DeserializeObject<List<EnquiryStatus>>(json);
+    }
 
     [HttpGet("GetAllTypes")]
-    public List<EnquiryType> GetAllTypes() => _context.EnquiryType.ToList();
+    public async Task<List<EnquiryType>> GetAllTypes()
+    {
+        var response = await _httpClient.GetAsync($"{_supabaseUrl}EnquiryType?select=*");
 
-    [HttpGet("GetAllEnquiry")]
-    public List<EnquiryModel> GetAllEnquiry() => _context.EnquiryModel.ToList();
+        if (!response.IsSuccessStatusCode)
+            return new List<EnquiryType>();
 
+        var json = await response.Content.ReadAsStringAsync();
+
+        return JsonConvert.DeserializeObject<List<EnquiryType>>(json);
+    }
+    //[HttpGet("GetAllEnquiry")]
+    //public List<EnquiryModel> GetAllEnquiry() => _context.EnquiryModel.ToList();
+
+    //[HttpGet("GetAllEnquiry")]
+    //public async Task<List<EnquiryModel>> GetAllEnquiry()
+    //{
+    //    var response = await _httpClient.GetAsync($"{_supabaseUrl}EnquiryModel?select=*");
+    //    var json = await response.Content.ReadAsStringAsync();
+
+    //    return JsonConvert.DeserializeObject<List<EnquiryModel>>(json);
+    //}
+
+    //[HttpPost("CreateNewEnquiry")]
+    //public EnquiryModel AddNewEnquiry(EnquiryModel newEnquiry)
+    //{
+    //    newEnquiry.createdDate = DateTime.Now;
+    //    _context.EnquiryModel.Add(newEnquiry);
+    //    _context.SaveChanges();
+    //    return newEnquiry;
+    //}
     [HttpPost("CreateNewEnquiry")]
-    public EnquiryModel AddNewEnquiry(EnquiryModel newEnquiry)
+    public async Task<EnquiryModel> AddNewEnquiry(EnquiryModel newEnquiry)
     {
         newEnquiry.createdDate = DateTime.Now;
-        _context.EnquiryModel.Add(newEnquiry);
-        _context.SaveChanges();
-        return newEnquiry;
-    }
 
+        var content = new StringContent(
+            JsonConvert.SerializeObject(newEnquiry),
+            Encoding.UTF8,
+            "application/json"
+        );
+
+        var response = await _httpClient.PostAsync($"{_supabaseUrl}EnquiryModel", content);
+
+        var json = await response.Content.ReadAsStringAsync();
+        return JsonConvert.DeserializeObject<List<EnquiryModel>>(json).FirstOrDefault();
+    }
     [HttpPut("UpdateEnquiry")]
-    public EnquiryModel Update(EnquiryModel updateEnquiry)
+    public async Task<bool> Update(EnquiryModel updateEnquiry)
     {
-        var existing = _context.EnquiryModel.Find(updateEnquiry.enquiryId);
-        if (existing != null)
-        {
-            existing.enquiryTypeId = updateEnquiry.enquiryTypeId;
-            existing.enquiryStatusId = updateEnquiry.enquiryStatusId;
-            existing.customerName = updateEnquiry.customerName;
-            existing.mobileNo = updateEnquiry.mobileNo;
-            existing.email = updateEnquiry.email;
-            existing.message = updateEnquiry.message;
-            existing.resolution = updateEnquiry.resolution;
-            _context.SaveChanges();
-        }
-        return updateEnquiry;
-    }
+        var content = new StringContent(
+            JsonConvert.SerializeObject(updateEnquiry),
+            Encoding.UTF8,
+            "application/json"
+        );
 
+        var response = await _httpClient.PatchAsync(
+            $"{_supabaseUrl}EnquiryModel?enquiryId=eq.{updateEnquiry.enquiryId}",
+            content
+        );
+
+        return response.IsSuccessStatusCode;
+    }
+    //    
+    //[HttpDelete("DeleteEnquiryById")]
+    //public async Task<bool> Delete(int id)
+    //{
+    //    var response = await _httpClient.DeleteAsync(
+    //        $"{_supabaseUrl}EnquiryModel?enquiryId=eq.{id}"
+    //    );
+
+    //    return response.IsSuccessStatusCode;
+    //}
     [HttpDelete("DeleteEnquiryById")]
-    public bool Delete(int id)
+    public async Task<bool> Delete(int id)
     {
-        var existing = _context.EnquiryModel.Find(id);
-        if (existing != null)
-        {
-            _context.EnquiryModel.Remove(existing);
-            _context.SaveChanges();
-            return true;
-        }
-        return false;
+        var response = await _httpClient.DeleteAsync(
+            $"{_supabaseUrl}EnquiryModel?enquiryId=eq.{id}"
+        );
+
+        return response.IsSuccessStatusCode;
     }
 }
