@@ -77,21 +77,32 @@ public class EnquiryMasterController : ControllerBase
     //    return newEnquiry;
     //}
     [HttpPost("CreateNewEnquiry")]
-    public async Task<EnquiryModel> AddNewEnquiry(EnquiryModel newEnquiry)
-    {
-        newEnquiry.createdDate = DateTime.Now;
+public async Task<EnquiryModel?> AddNewEnquiry(EnquiryModel newEnquiry)
+{
+    newEnquiry.createdDate = DateTime.UtcNow;
 
-        var content = new StringContent(
-            JsonConvert.SerializeObject(newEnquiry),
-            Encoding.UTF8,
-            "application/json"
-        );
+    var content = new StringContent(
+        JsonConvert.SerializeObject(newEnquiry),
+        Encoding.UTF8,
+        "application/json"
+    );
 
-        var response = await _httpClient.PostAsync($"{_supabaseUrl}EnquiryModel", content);
+    // 🔥 HEADER FONDAMENTALE PER SUPABASE
+    var request = new HttpRequestMessage(HttpMethod.Post, $"{_supabaseUrl}EnquiryModel");
+    request.Content = content;
+    request.Headers.Add("Prefer", "return=representation");
 
-        var json = await response.Content.ReadAsStringAsync();
-        return JsonConvert.DeserializeObject<List<EnquiryModel>>(json).FirstOrDefault();
-    }
+    var response = await _httpClient.SendAsync(request);
+
+    if (!response.IsSuccessStatusCode)
+        return null;
+
+    var json = await response.Content.ReadAsStringAsync();
+
+    var result = JsonConvert.DeserializeObject<List<EnquiryModel>>(json);
+
+    return result?.FirstOrDefault();
+}
     [HttpPut("UpdateEnquiry")]
     public async Task<bool> Update(EnquiryModel updateEnquiry)
     {
