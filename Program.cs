@@ -9,7 +9,7 @@ builder.Services.AddHttpClient();
 // CORS: consenti solo il frontend Netlify
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngular", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
         policy
             .WithOrigins("https://apinetcoreenquiry.netlify.app")
