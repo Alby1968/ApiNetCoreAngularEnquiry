@@ -8,7 +8,7 @@ using System.Text;
 [Route("api/[controller]")]
 [ApiController]
 [EnableCors("AllowAll")]  // <--- ora corrisponde alla policy
-[ApiExplorerSettings(GroupName = "Enquiry")]
+//[ApiExplorerSettings(GroupName = "Enquiry")]
 public class EnquiryMasterController : ControllerBase
 {
     //private readonly EnquiryDbContext _context;
