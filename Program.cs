@@ -14,7 +14,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll",
         policy =>
         {
-            policy..WithOrigins("https://apinetcoreenquiry.netlify.app")
+            policy.WithOrigins("https://apinetcoreenquiry.netlify.app")
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
