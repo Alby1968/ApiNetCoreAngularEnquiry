@@ -35,17 +35,17 @@ var app = builder.Build();
 // MIDDLEWARE
 app.UseRouting();
 
-app.UseCors("AllowAngular");
+app.UseCors("AllowAll");
 
 app.UseAuthorization();
 
 // Abilita Swagger se necessario
-// app.UseSwagger();
-// app.UseSwaggerUI(c =>
-// {
-//     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Enquiry API V1");
-//     c.RoutePrefix = "swagger";
-// });
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Enquiry API V1");
+     c.RoutePrefix = "swagger";
+});
 
 app.MapControllers();
 
