@@ -112,22 +112,22 @@ public class EnquiryMasterController : ControllerBase
 
     //    return result?.FirstOrDefault();
     //}
-    //[HttpPut("UpdateEnquiry")]
-    //public async Task<bool> Update(EnquiryModel updateEnquiry)
-    //{
-    //    var content = new StringContent(
-    //        JsonConvert.SerializeObject(updateEnquiry),
-    //        Encoding.UTF8,
-    //        "application/json"
-    //    );
+    [HttpPut("UpdateEnquiry")]
+    public async Task<bool> Update(EnquiryModel updateEnquiry)
+    {
+        var content = new StringContent(
+            JsonConvert.SerializeObject(updateEnquiry),
+            Encoding.UTF8,
+            "application/json"
+        );
 
-    //    var response = await _httpClient.PatchAsync(
-    //        $"{_supabaseUrl}EnquiryModel?enquiryId=eq.{updateEnquiry.enquiryId}",
-    //        content
-    //    );
+        var response = await _httpClient.PatchAsync(
+            $"{_supabaseUrl}EnquiryModel?enquiryId=eq.{updateEnquiry.enquiryId}",
+            content
+        );
 
-    //    return response.IsSuccessStatusCode;
-    //}
+        return response.IsSuccessStatusCode;
+    }
 
     [HttpPost("CreateNewEnquiry")]
     public async Task<IActionResult> AddNewEnquiry(
@@ -186,17 +186,7 @@ public class EnquiryMasterController : ControllerBase
 
         return Content(json, "application/json");
     }
-
-    //    
-    //[HttpDelete("DeleteEnquiryById")]
-    //public async Task<bool> Delete(int id)
-    //{
-    //    var response = await _httpClient.DeleteAsync(
-    //        $"{_supabaseUrl}EnquiryModel?enquiryId=eq.{id}"
-    //    );
-
-    //    return response.IsSuccessStatusCode;
-    //}
+        
     [HttpDelete("DeleteEnquiryById")]
     public async Task<bool> Delete(int id)
     {
