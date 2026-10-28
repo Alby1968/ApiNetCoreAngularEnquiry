@@ -22,7 +22,7 @@ public class EnquiryMasterController : ControllerBase
     private readonly string _supabaseUrl = "https://zanjsybekkkadfqfbilc.supabase.co/rest/v1/";
     private readonly string _apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphbmpzeWJla2trYWRmcWZiaWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNzc1OTIsImV4cCI6MjA5Mjk1MzU5Mn0.jP2PlBhacXCirKmyu8nSLAuKjIRCRH7LKYoKK0BU4SA";
 
-    public EnquiryMasterController(HttpClient httpClient,IConfiguration config)
+    public EnquiryMasterController(HttpClient httpClient, IConfiguration config)
     {
         _httpClient = httpClient;
         _apiKey = config["Supabase:Key"];
@@ -62,79 +62,131 @@ public class EnquiryMasterController : ControllerBase
     }
     //[HttpGet("GetAllEnquiry")]
     //public List<EnquiryModel> GetAllEnquiry() => _context.EnquiryModel.ToList();
-[HttpGet("GetAllEnquiry")]
-public async Task<IActionResult> GetAllEnquiry()
-{
-    var response = await _httpClient.GetAsync($"{_supabaseUrl}EnquiryModel?select=*");
-
-    var json = await response.Content.ReadAsStringAsync();
-
-    if (!response.IsSuccessStatusCode)
+    [HttpGet("GetAllEnquiry")]
+    public async Task<IActionResult> GetAllEnquiry()
     {
-        return StatusCode((int)response.StatusCode, json);
-    }
-
-    try
-    {
-        var data = JsonConvert.DeserializeObject<List<EnquiryModel>>(json);
-        return Ok(data);
-    }
-    catch (Exception ex)
-    {
-        return StatusCode(500, ex.Message + " | JSON: " + json);
-    }
-}
-     //[HttpPost("CreateNewEnquiry")]
-    //public EnquiryModel AddNewEnquiry(EnquiryModel newEnquiry)
-    //{
-    //    newEnquiry.createdDate = DateTime.Now;
-    //    _context.EnquiryModel.Add(newEnquiry);
-    //    _context.SaveChanges();
-    //    return newEnquiry;
-    //}
-    [HttpPost("CreateNewEnquiry")]
-    public async Task<EnquiryModel?> AddNewEnquiry(EnquiryModel newEnquiry)
-    {
-        newEnquiry.createdDate = DateTime.UtcNow;
-
-        var content = new StringContent(
-            JsonConvert.SerializeObject(newEnquiry),
-            Encoding.UTF8,
-            "application/json"
-        );
-
-        // 🔥 HEADER FONDAMENTALE PER SUPABASE
-        var request = new HttpRequestMessage(HttpMethod.Post, $"{_supabaseUrl}EnquiryModel");
-        request.Content = content;
-        request.Headers.Add("Prefer", "return=representation");
-
-        var response = await _httpClient.SendAsync(request);
-
-        if (!response.IsSuccessStatusCode)
-            return null;
+        var response = await _httpClient.GetAsync($"{_supabaseUrl}EnquiryModel?select=*");
 
         var json = await response.Content.ReadAsStringAsync();
 
-        var result = JsonConvert.DeserializeObject<List<EnquiryModel>>(json);
+        if (!response.IsSuccessStatusCode)
+        {
+            return StatusCode((int)response.StatusCode, json);
+        }
 
-        return result?.FirstOrDefault();
+        try
+        {
+            var data = JsonConvert.DeserializeObject<List<EnquiryModel>>(json);
+            return Ok(data);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message + " | JSON: " + json);
+        }
     }
-    [HttpPut("UpdateEnquiry")]
-    public async Task<bool> Update(EnquiryModel updateEnquiry)
+
+    //[HttpPost("CreateNewEnquiry")]
+    //public async Task<EnquiryModel?> AddNewEnquiry(EnquiryModel newEnquiry)
+    //{
+    //    newEnquiry.createdDate = DateTime.UtcNow;
+
+    //    var content = new StringContent(
+    //        JsonConvert.SerializeObject(newEnquiry),
+    //        Encoding.UTF8,
+    //        "application/json"
+    //    );
+
+    //    // 🔥 HEADER FONDAMENTALE PER SUPABASE
+    //    var request = new HttpRequestMessage(HttpMethod.Post, $"{_supabaseUrl}EnquiryModel");
+    //    request.Content = content;
+    //    request.Headers.Add("Prefer", "return=representation");
+
+    //    var response = await _httpClient.SendAsync(request);
+
+    //    if (!response.IsSuccessStatusCode)
+    //        return null;
+
+    //    var json = await response.Content.ReadAsStringAsync();
+
+    //    var result = JsonConvert.DeserializeObject<List<EnquiryModel>>(json);
+
+    //    return result?.FirstOrDefault();
+    //}
+    //[HttpPut("UpdateEnquiry")]
+    //public async Task<bool> Update(EnquiryModel updateEnquiry)
+    //{
+    //    var content = new StringContent(
+    //        JsonConvert.SerializeObject(updateEnquiry),
+    //        Encoding.UTF8,
+    //        "application/json"
+    //    );
+
+    //    var response = await _httpClient.PatchAsync(
+    //        $"{_supabaseUrl}EnquiryModel?enquiryId=eq.{updateEnquiry.enquiryId}",
+    //        content
+    //    );
+
+    //    return response.IsSuccessStatusCode;
+    //}
+
+    [HttpPost("CreateNewEnquiry")]
+    public async Task<IActionResult> AddNewEnquiry(
+        [FromBody] EnquiryModel newEnquiry)
     {
+        if (newEnquiry == null)
+            return BadRequest("Dati enquiry mancanti.");
+
+        newEnquiry.createdDate = DateTime.UtcNow;
+
+        // Prepara i dati da inserire.
+        // Non inviare enquiryId se viene generato automaticamente da Supabase.
+        var payload = new
+        {
+            newEnquiry.enquiryTypeId,
+            newEnquiry.enquiryStatusId,
+            newEnquiry.customerName,
+            newEnquiry.mobileNo,
+            newEnquiry.email,
+            newEnquiry.message,
+            newEnquiry.createdDate,
+            newEnquiry.resolution
+        };
+
         var content = new StringContent(
-            JsonConvert.SerializeObject(updateEnquiry),
+            JsonConvert.SerializeObject(payload),
             Encoding.UTF8,
             "application/json"
         );
 
-        var response = await _httpClient.PatchAsync(
-            $"{_supabaseUrl}EnquiryModel?enquiryId=eq.{updateEnquiry.enquiryId}",
-            content
+        using var request = new HttpRequestMessage(
+            HttpMethod.Post,
+            $"{_supabaseUrl}EnquiryModel"
         );
 
-        return response.IsSuccessStatusCode;
+        request.Content = content;
+        request.Headers.TryAddWithoutValidation(
+            "Prefer",
+            "return=representation"
+        );
+
+        using var response = await _httpClient.SendAsync(request);
+        var json = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            return StatusCode(
+                (int)response.StatusCode,
+                new
+                {
+                    message = "Errore durante l'inserimento su Supabase",
+                    details = json
+                }
+            );
+        }
+
+        return Content(json, "application/json");
     }
+
     //    
     //[HttpDelete("DeleteEnquiryById")]
     //public async Task<bool> Delete(int id)
