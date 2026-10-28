@@ -2,25 +2,23 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ===== SERVIZI =====
+// SERVIZI
 builder.Services.AddControllers();
-
-// HttpClient (necessario per Supabase REST)
 builder.Services.AddHttpClient();
 
-// ===== CORS =====
+// CORS: consenti solo il frontend Netlify
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        policy =>
-        {
-            policy.WithOrigins("https://apinetcoreenquiry.netlify.app")
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy
+            .WithOrigins("https://apinetcoreenquiry.netlify.app")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
 });
 
-// ===== SWAGGER =====
+// SWAGGER
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -34,27 +32,26 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// ===== MIDDLEWARE =====
+// MIDDLEWARE
 app.UseRouting();
-app.UseCors("AllowAll");
 
-//app.UseSwagger();
-//app.UseSwaggerUI(c =>
-//{
-//    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Enquiry API V1");
-//    c.RoutePrefix = "swagger";
-//});
+app.UseCors("AllowAngular");
 
 app.UseAuthorization();
 
-//app.UseDefaultFiles();
-//app.UseStaticFiles();
+// Abilita Swagger se necessario
+// app.UseSwagger();
+// app.UseSwaggerUI(c =>
+// {
+//     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Enquiry API V1");
+//     c.RoutePrefix = "swagger";
+// });
 
 app.MapControllers();
 
 app.MapGet("/", () => "ApiNetCoreAngularEnquiry is running 🚀");
 
-// ===== RENDER PORT FIX =====
+// PORTA RENDER
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 app.Urls.Add($"http://0.0.0.0:{port}");
 
