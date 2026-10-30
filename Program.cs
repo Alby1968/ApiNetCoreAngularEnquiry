@@ -49,7 +49,7 @@ app.UseSwaggerUI(c =>
 
 app.MapControllers();
 
-app.MapGet("/", () => "ApiNetCoreAngularEnquiry is running 🚀");
+app.MapGet("/", () => "ApiNetCoreAngularEnquiry is running 🚀");    
 
 // PORTA RENDER
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
