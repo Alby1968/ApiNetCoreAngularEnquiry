@@ -54,6 +54,6 @@ app.MapControllers();
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 app.Urls.Add($"http://0.0.0.0:{port}");
 
-app.MapGet("/", () => "ApiNetCoreAngularEnquiry is running 🚀");   
+app.MapGet("/", () => "Api is running 🚀");   
 
 app.Run();
