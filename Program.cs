@@ -12,7 +12,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll", policy =>
     {
         policy
-            .WithOrigins("https://apinetcoreenquiry.netlify.app")
+            .WithOrigins("https://effervescent-haupia-0f73ab.netlify.app",   "https://apinetcoreenquiry.netlify.app")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
